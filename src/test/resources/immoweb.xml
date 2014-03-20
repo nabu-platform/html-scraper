@@ -1,0 +1,19 @@
+<instance id="main">
+	<step action="cleanup"/>
+	<step action="select" target="//td[@id='column-central']"/>
+	<step action="before" target="/td/table" value="//ul[@class='description']"/>
+	<step action="trim"/>
+	<step action="drop" target="/td/table|//@target|//a/text()|//@id|//li[not(node())]|//li[@class='barre']" />
+	<step action="rename" target="/td" value="result"/>
+	<step action="rename" target="//ul" value="house"/>
+	<step action="rename" target="//house/li[4]" value="city"/>
+	<step action="rename" target="//house/li[3]" value="description"/>
+	<step action="strip" target="//house/li[2]" />
+	<step action="rename" target="//house/li[1]" value="price"/>
+	<step action="extract" target="//a/@title"/>
+	<step action="extract" target="//a/@href"/>
+	<step action="rename" target="//href" value="link"/>
+	<step action="copy" target="//link" value="id"/>
+	<step action="substring" target="//id" value="[0-9]+"/>
+	<step action="drop" target="//a|//@class|//li"/>
+</instance>
