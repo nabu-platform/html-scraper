@@ -137,9 +137,20 @@ public class XMLRewriter {
 	 * @return
 	 */
 	public XMLRewriter select(Node node) {
-		document.removeChild(document.getDocumentElement());
-		document.appendChild(document.importNode(node, true));
+		if (node != null) {
+			document.removeChild(document.getDocumentElement());
+			document.appendChild(document.importNode(node, true));
+		}
+		else
+			emptyDocument();
 		return this;
+	}
+	
+	/**
+	 * In some cases the document has to be emptied out because you scoped to something that does not exist
+	 */
+	private void emptyDocument() {
+		document = newDocument();
 	}
 	
 	/**
@@ -156,6 +167,8 @@ public class XMLRewriter {
 				element.appendChild(document.importNode(node, true));
 			}
 		}
+		else
+			emptyDocument();
 		return this;
 	}
 	
@@ -215,6 +228,8 @@ public class XMLRewriter {
 				element.appendChild(document.importNode(node, true));
 			}
 		}
+		else
+			emptyDocument();
 		return this;
 	}
 	
@@ -400,7 +415,7 @@ public class XMLRewriter {
 	@Override
 	public String toString() {
 		try {
-			return toString(document.getDocumentElement());
+			return document.getDocumentElement() == null ? null : toString(document.getDocumentElement());
 		}
 		catch (TransformerException e) {
 			return super.toString();
