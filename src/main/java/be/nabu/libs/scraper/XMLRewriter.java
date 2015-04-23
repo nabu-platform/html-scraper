@@ -62,6 +62,8 @@ public class XMLRewriter {
 			instances.get(step.getInstance()).strip(instances.get(step.getInstance()).findAll(step.getTarget()));
 		else if (step.getAction().equals("rename"))
 			instances.get(step.getInstance()).rename(instances.get(step.getInstance()).findAll(step.getTarget()), step.getValue());
+		else if (step.getAction().equals("wrap"))
+			instances.get(step.getInstance()).wrap(instances.get(step.getInstance()).findAll(step.getTarget()), step.getValue());
 		else if (step.getAction().equals("substring"))
 			instances.get(step.getInstance()).substring(instances.get(step.getInstance()).findAll(step.getTarget()), step.getValue());
 		else if (step.getAction().equals("trim"))
@@ -74,6 +76,8 @@ public class XMLRewriter {
 			instances.get(step.getInstance()).select(instances.get(configuration.getId()).find(step.getTarget()));
 		else if (step.getAction().equals("extract"))
 			instances.get(step.getInstance()).extract(instances.get(configuration.getId()).findAll(step.getTarget()));
+		else if (step.getAction().equals("dropText"))
+			instances.get(step.getInstance()).dropText(instances.get(configuration.getId()).findAll(step.getTarget()));
 		else if (step.getAction().equals("after")) {
 			if (step.getValue() != null)
 				instances.get(step.getInstance()).after(instances.get(configuration.getId()).find(step.getTarget()), instances.get(step.getInstance()).findAll(step.getValue()));
@@ -240,10 +244,23 @@ public class XMLRewriter {
 		node.getParentNode().removeChild(node);
 		return this;
 	}
-	
 	public XMLRewriter strip(NodeList list) {
 		for (int i = list.getLength() - 1; i >= 0; i--)
 			strip(list.item(i));
+		return this;
+	}
+
+	public XMLRewriter wrap(NodeList list, String name) {
+		for (int i = list.getLength() - 1; i >= 0; i--)
+			wrap(list.item(i), name);
+		return this;
+	}
+	public XMLRewriter wrap(Node node, String name) {
+		Node parent = node.getParentNode();
+		Element element = node.getOwnerDocument().createElement(name);
+		parent.insertBefore(element, node);
+		parent.removeChild(node);
+		element.appendChild(node);
 		return this;
 	}
 	
@@ -295,6 +312,13 @@ public class XMLRewriter {
 				parent.getParentNode().insertBefore(newElement, target);
 			attribute.getOwnerElement().removeAttribute(attribute.getName());
 		}
+		else if (node.getNodeType() == Node.TEXT_NODE) {
+			Element newElement = node.getOwnerDocument().createElement("text");
+			newElement.setTextContent(node.getTextContent());
+			Node parent = node.getParentNode();
+			parent.insertBefore(newElement, node);
+			parent.removeChild(node);
+		}
 		return this;
 	}
 	
@@ -337,6 +361,23 @@ public class XMLRewriter {
 		}
 		return this;
 	}
+	
+	public XMLRewriter dropText(NodeList nodes) {
+		for (int i = 0; i < nodes.getLength(); i++)
+			dropText(nodes.item(i));
+		return this;
+	}
+	public XMLRewriter dropText(Node node) {
+		if (!isText(node)) {
+			for (int i = node.getChildNodes().getLength() - 1; i >= 0; i--) {
+				if (node.getChildNodes().item(i).getNodeType() == Node.TEXT_NODE) {
+					node.removeChild(node.getChildNodes().item(i));
+				}
+			}
+		}
+		return this;
+	}
+	
 	private boolean isText(Node node) {
 		if (node.getNodeType() == Node.TEXT_NODE)
 			return true;
