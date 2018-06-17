@@ -19,18 +19,19 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/nu.validator/htmlparser -->
 		<dependency>
-			<groupId>nu.validator.htmlparser</groupId>
-			<artifactId>htmlparser</artifactId>
-			<version>1.4</version>
+		    <groupId>nu.validator</groupId>
+		    <artifactId>htmlparser</artifactId>
+		    <version>1.4.10</version>
 		</dependency>
 	</dependencies>
 </project>
