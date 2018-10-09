@@ -71,7 +71,7 @@ public class XMLRewriter {
 		else if (step.getAction().equals("normalize"))
 			instances.get(step.getInstance()).normalize();
 		else if (step.getAction().equals("append"))
-			instances.get(step.getInstance()).append(instances.get(configuration.getId()).find(step.getTarget()), instances.get(step.getInstance()).findAll(step.getValue()));
+			instances.get(step.getInstance()).append(instances.get(step.getFrom() == null ? configuration.getId() : step.getFrom()).find(step.getTarget()), instances.get(step.getInstance()).findAll(step.getValue()));
 		else if (step.getAction().equals("select"))
 			instances.get(step.getInstance()).select(instances.get(configuration.getId()).find(step.getTarget()));
 		else if (step.getAction().equals("extract"))

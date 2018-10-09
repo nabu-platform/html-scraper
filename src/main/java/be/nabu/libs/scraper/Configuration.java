@@ -43,11 +43,18 @@ public class Configuration {
 
 
 	public static class Step {
-		private String target, action, description;
+		private String target, action, description, from;
 		private String value;
 		private List<Configuration> instances;
 		private String instance;
 		
+		@XmlAttribute
+		public String getFrom() {
+			return from;
+		}
+		public void setFrom(String from) {
+			this.from = from;
+		}
 		@XmlAttribute
 		public String getTarget() {
 			return target;
