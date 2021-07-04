@@ -66,7 +66,7 @@ public class Scraper extends XMLRewriter {
 		}
 	}
 	
-	private static InputStream html2xml(InputStream input) throws IOException, SAXException {
+	public static InputStream html2xml(InputStream input) throws IOException, SAXException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream(); 
 		html2xml(input, output);
 		return new ByteArrayInputStream(output.toByteArray());
